@@ -8,7 +8,9 @@ import { trpc } from '../utils/trpc';
 
 export default function Home() {
   // const hello = trpc.hello.useQuery({ text: 'client' });
-  const hello = trpc.hello.useQuery({text: "mom"})
+  const hello = trpc.hello.useQuery({ text: "mom" });
+  // trpc.userList.useQuery("pinaz");
+  // trpc.userCreate.useMutation("sadiq");
 
   if (!hello.data) {
     return <div>Loading...</div>;
