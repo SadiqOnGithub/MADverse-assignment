@@ -3,8 +3,17 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
+import { trpc } from '../utils/trpc';
+
 
 export default function Home() {
+  // const hello = trpc.hello.useQuery({ text: 'client' });
+  const hello = trpc.hello.useQuery({text: "mom"})
+
+  if (!hello.data) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <Container maxWidth="lg">
       <Box
@@ -17,7 +26,7 @@ export default function Home() {
         }}
       >
         <Typography variant="h4" component="h1" gutterBottom>
-          MMMMMaterial UI - Next.js example in TypeScript
+          {hello.data.greeting}
         </Typography>
       </Box>
     </Container>
