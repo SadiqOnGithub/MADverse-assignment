@@ -7,13 +7,23 @@ import { trpc } from '../utils/trpc';
 
 
 export default function Home() {
-  // const hello = trpc.hello.useQuery({ text: 'client' });
-  const hello = trpc.hello.useQuery({ text: "mom" });
+  const hello = trpc.hello.useQuery({ text: 'client' });
+  // const hello = trpc.hello.useQuery({ text: "mom" });
   // trpc.userList.useQuery("pinaz");
-  // trpc.userCreate.useMutation("sadiq");
+  const mutation = trpc.userCreate.useMutation({
 
-  if (!hello.data) {
-    return <div>Loading...</div>;
+  });
+  React.useEffect(() => {
+    mutation.mutateAsync("sadiq");
+  }, []);
+
+
+
+  if (!mutation.data) {
+    return <div>{mutation.data} ???</div>;
+  } else {
+    console.log(mutation);
+    return JSON.stringify(mutation);
   }
 
   return (
@@ -28,7 +38,7 @@ export default function Home() {
         }}
       >
         <Typography variant="h4" component="h1" gutterBottom>
-          {hello.data.greeting}
+          {hello.data?.greeting}
         </Typography>
       </Box>
     </Container>
