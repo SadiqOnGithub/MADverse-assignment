@@ -9,3 +9,17 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
+model Pokemon {
+  id     Int      @id @default(autoincrement())
+  name   String
+  sprite String
+  types  Type[]
+}
+
+model Type {
+  id    Int     @id @default(autoincrement())
+  name  String
+  pokemon Pokemon @relation(fields: [pokemonId], references: [id])
+  pokemonId Int
+}
