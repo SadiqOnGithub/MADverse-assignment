@@ -14,12 +14,11 @@ model Pokemon {
   id     Int      @id @default(autoincrement())
   name   String
   sprite String
-  types  Type[]
+  types  Type[]   // Define the many-to-many relationship
 }
 
 model Type {
-  id    Int     @id @default(autoincrement())
-  name  String
-  pokemon Pokemon @relation(fields: [pokemonId], references: [id])
-  pokemonId Int
+  id      Int     @id @default(autoincrement())
+  name    String  @unique // Add a unique constraint on the name field
+  pokemon Pokemon[] // Define the many-to-many relationship
 }
