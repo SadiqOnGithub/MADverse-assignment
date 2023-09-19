@@ -7,24 +7,9 @@ import { trpc } from '../utils/trpc';
 
 
 export default function Home() {
-  const hello = trpc.hello.useQuery({ text: 'client' });
-  // const hello = trpc.hello.useQuery({ text: "mom" });
-  // trpc.userList.useQuery("pinaz");
-  const mutation = trpc.userCreate.useMutation({
-
-  });
-  React.useEffect(() => {
-    mutation.mutateAsync("sadiq");
-  }, []);
-
-
-
-  if (!mutation.data) {
-    return <div>{mutation.data} ???</div>;
-  } else {
-    console.log(mutation);
-    return JSON.stringify(mutation);
-  }
+  const hello = trpc.hello.useQuery('mom');
+  const pok = trpc.pokemon.getPokemon.useQuery({ name: "Bulbasaur" });
+  console.log(pok.data);
 
   return (
     <Container maxWidth="lg">
