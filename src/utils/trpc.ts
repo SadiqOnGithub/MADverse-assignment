@@ -1,6 +1,7 @@
 import { httpBatchLink, loggerLink } from '@trpc/client';
 import { createTRPCNext } from '@trpc/next';
 import type { AppRouter } from '../server/routers/_app';
+import { transformer } from './transformer';
 
 function getBaseUrl() {
   if (typeof window !== 'undefined')
@@ -22,6 +23,7 @@ function getBaseUrl() {
 export const trpc = createTRPCNext<AppRouter>({
   config(opts) {
     return {
+      transformer,
       links: [
         // adds pretty logs to your console in development and logs errors in production
         loggerLink({
@@ -44,6 +46,10 @@ export const trpc = createTRPCNext<AppRouter>({
           },
         }),
       ],
+      /**
+       * @link https://tanstack.com/query/v4/docs/react/reference/QueryClient
+       */
+      // queryClientConfig: { defaultOptions: { queries: { staleTime: 60 } } },
     };
   },
   /**

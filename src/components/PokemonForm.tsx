@@ -1,12 +1,14 @@
 import React, { useState, type SyntheticEvent } from 'react';
 import { Box, TextField, Button, Container, Autocomplete } from '@mui/material';
 
-import PokemonRow from './PokemonRow';
 import { trpc } from '@/utils/trpc';
+import PokemonRow from './PokemonRow';
 
 const PokemonForm: React.FC = () => {
   const [pokemonName, setPokemonName] = useState('');
-  const { data: pokemonNames, isLoading } = trpc.pokemon.getAllPokemonNames.useQuery();
+  const { data: pokemonNames, isLoading } = trpc.pokemon.getPokemonNames.useQuery();
+  const { data: pokemons } = trpc.pokemon.getPokemonByNames.useQuery(["alakazam", "pikachu"])
+  console.log(pokemons)
 
 
   const onsubmit = (e: any) => {
