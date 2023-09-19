@@ -25,6 +25,40 @@ export const pokemon = router({
         });
       }
 
-      return pokemon;
-    })
+      // Transform the Prisma data into the desired format
+      const formattedPokemon = {
+        id: pokemon.id,
+        name: pokemon.name,
+        types: pokemon.types.map((type) => type.name),
+        sprite: pokemon.sprite,
+      };
+
+      return formattedPokemon;
+    }),
+
+  // Procedure to get all Pokémon names
+  getAllPokemonNames: procedure
+    .query(async () => {
+      const allPokemonNames = await prisma.pokemon.findMany({
+        select: {
+          name: true,
+        },
+      });
+
+      return allPokemonNames.map((pokemon) => pokemon.name).sort();
+    }),
+
 });
+
+
+// Define the input and output types for the query
+export type GetPokemonInput = {
+  name: string;
+};
+
+export type GetPokemonOutput = {
+  id: number;
+  name: string;
+  types: string[];
+  sprite: string;
+};

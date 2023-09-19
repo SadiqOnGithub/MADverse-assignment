@@ -9,8 +9,6 @@
     "db-clear-F": "tsx prisma/clear-db.ts",
 		"db-reset": "prisma migrate dev reset",
 		"dx:next": "run-s migrate-dev db-seed && next dev",
-		"dx:prisma-studio": "prisma-studio",
-		"dx": "run-p dx:* --print-label",
 		"dev": "next dev",
 		"migrate-dev": "prisma migrate dev",
 		"build": "next build",
