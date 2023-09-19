@@ -2,68 +2,18 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-const seedData = [
-  {
-    name: "Bulbasaur",
-    sprite: "https://pokemon.com/pictures/bulbasaur.png",
-    types: ["grass"],
-  },
-  {
-    name: "Charmander",
-    sprite: "https://pokemon.com/pictures/charmander.png",
-    types: ["fire"],
-  },
-  {
-    name: "Squirtle",
-    sprite: "https://pokemon.com/pictures/squirtle.png",
-    types: ["water"],
-  },
-  {
-    name: "Pikachu",
-    sprite: "https://pokemon.com/pictures/pikachu.png",
-    types: ["electric"],
-  },
-  {
-    name: "Jigglypuff",
-    sprite: "https://pokemon.com/pictures/jigglypuff.png",
-    types: ["normal", "fairy"],
-  },
-  {
-    name: "Eevee",
-    sprite: "https://pokemon.com/pictures/eevee.png",
-    types: ["normal"],
-  },
-  {
-    name: "Pidgey",
-    sprite: "https://pokemon.com/pictures/pidgey.png",
-    types: ["normal", "flying"],
-  },
-  {
-    name: "Machop",
-    sprite: "https://pokemon.com/pictures/machop.png",
-    types: ["fighting"],
-  },
-  {
-    name: "Geodude",
-    sprite: "https://pokemon.com/pictures/geodude.png",
-    types: ["rock", "ground"],
-  },
-  {
-    name: "Magikarp",
-    sprite: "https://pokemon.com/pictures/magikarp.png",
-    types: ["water"],
-  }
-];
+const NUMBER_OF_POKEMON_TO_SEED = 100; // Change this to the desired number of Pokemon
 
 async function seedDatabase() {
-  const createdPokemon = [];
+  const seedData = await fetchAllPokemonData();
 
   for (const item of seedData) {
+
+    // checking if types exist or not; creating types if not exist in db
     const typeNames = item.types;
     item.types = []; // Clear the types array in the Pokemon data
-
     const existingTypes = await Promise.all(
-      typeNames.map(async (typeName) => {
+      typeNames.map(async (typeName: string) => {     // checking the existance of each type
         const existingType = await prisma.type.findFirst({
           where: { name: typeName },
         });
@@ -71,27 +21,27 @@ async function seedDatabase() {
         if (existingType) {
           return existingType;
         } else {
-          return prisma.type.create({ data: { name: typeName } });
+          return prisma.type.create({ data: { name: typeName } }); // creating types
         }
       })
     );
 
+    // creating the pokemon and connecting to the relevant type/types
     const pokemon = await prisma.pokemon.create({
       data: {
         ...item,
         types: { connect: existingTypes.map((type) => ({ id: type.id })) },
       },
     });
-
-    createdPokemon.push(pokemon);
   }
 
-  return createdPokemon;
+  return seedData.length;
 }
 
+
 seedDatabase()
-  .then((createdPokemon) => {
-    console.log("Seed data added successfully:", createdPokemon);
+  .then((numOfPokemons) => {
+    console.log(`Successfully added ${numOfPokemons} Pokemons 🎉`);
   })
   .catch((error) => {
     console.error("Error seeding data:", error);
@@ -100,3 +50,22 @@ seedDatabase()
     await prisma.$disconnect();
   });
 
+
+
+async function fetchPokemonData(index: number) {
+  const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${index + 1}`);
+  const pokemon = await res.json();
+  return {
+    name: pokemon.name,
+    sprite: pokemon.sprites.front_default,
+    types: pokemon.types.map((t: any) => t.type.name)
+  };
+};
+
+async function fetchAllPokemonData() {
+  const promises = Array(NUMBER_OF_POKEMON_TO_SEED)
+    .fill(null)
+    .map((_, index) => fetchPokemonData(index));
+
+  return await Promise.all(promises);
+};
