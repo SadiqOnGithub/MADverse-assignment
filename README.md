@@ -18,3 +18,9 @@ npm run prisma-studio
 After setting up the database, you can start the application by running:
 
 `npm run dev`
+
+
+
+## Deployed Link
+
+You can access the deployed application by following this link: [Pokémon Application](https://madverse-pokemon-e9tnqh7r7-sadiqonemail-gmailcom.vercel.app/)
