@@ -6,20 +6,23 @@ import { trpc } from '@/utils/trpc';
 import PokedexTable from './PokedexTable';
 
 type Props = {
-  pokemonNameList: string[];
+  pokemonType: string;
 };
 
-function PokemonTable({ pokemonNameList }: Props) {
+function PokemonTypeCall({ pokemonType }: Props) {
+  console.log(pokemonType);
   const {
     data: pokemons,
     isLoading
-  } = trpc.pokemon.getPokemonByNames.useQuery<GetPokemonOutput[]>(pokemonNameList);
-
+  } = trpc.pokemon.getPokemonByType.useQuery(pokemonType, {
+    refetchOnWindowFocus: false,
+  });
+  console.log(pokemons)
   return (
     <>
       {
         (isLoading && pokemons === undefined) ? (
-          <Skeleton variant='rounded' height={`calc(60px + ${pokemonNameList.length*70}px)`}/>
+          <Skeleton variant='rounded' height={`calc(60px + ${70}px)`} />
         ) : (
           <PokedexTable pokemons={pokemons} />
         )
@@ -28,4 +31,4 @@ function PokemonTable({ pokemonNameList }: Props) {
   );
 }
 
-export default React.memo(PokemonTable);
+export default PokemonTypeCall;

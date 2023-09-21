@@ -52,6 +52,26 @@ export const pokemon = router({
       return allPokemonNames.map((pokemon) => pokemon.name).sort();
     }),
 
+  // get pokemon's types
+  getPokemonTypes: procedure
+    .query(async ({ ctx }) => {
+      const response = await ctx.prisma.type.findMany({
+        select: {
+          name: true,
+        }
+      });
+
+      if (!response) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `No Type found`,
+        });
+      }
+
+      const typeNames = response.map((type) => type.name);
+      return typeNames;
+    }),
+
   // get pokemons by an array of names
   getPokemonByNames: procedure
     .input(z.array(z.string()))
@@ -80,7 +100,29 @@ export const pokemon = router({
         types: pokemon.types.map((type: any) => type.name),
         sprite: pokemon.sprite,
       }));
+    }),
 
+  // get pokemons by types
+  getPokemonByType: procedure
+    .input(z.string())
+    .query(async ({ input, ctx }) => {
+      const pokemonsArr = await ctx.prisma.type.findFirst({
+        where: {
+          name: input,
+        },
+        include: {
+          pokemon: true
+        },
+      });
+
+      if (!pokemonsArr) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `No Pokemon with type '${input}'`,
+        });
+      }
+      return pokemonsArr.pokemon
+        .map((pokemon) => ({ types: [input], ...pokemon }))  // adding the missing types
     }),
 });
 

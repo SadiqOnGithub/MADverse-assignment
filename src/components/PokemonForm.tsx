@@ -6,9 +6,9 @@ import PokemonRow from './PokemonRow';
 
 const PokemonForm: React.FC = () => {
   const [pokemonName, setPokemonName] = useState('');
-  const { data: pokemonNames, isLoading } = trpc.pokemon.getPokemonNames.useQuery();
-  const { data: pokemons } = trpc.pokemon.getPokemonByNames.useQuery(["alakazam", "pikachu"])
-  console.log(pokemons)
+  const { data: pokemonNames, isLoading } = trpc.pokemon.getPokemonNames.useQuery(undefined, {
+    refetchOnWindowFocus: false,
+  });
 
 
   const onsubmit = (e: any) => {
@@ -25,7 +25,7 @@ const PokemonForm: React.FC = () => {
           options={(!isLoading ? pokemonNames : []) as readonly string[]}
           loading={isLoading}
           loadingText="Summoning Pikachu's lightning bolts ⚡ ..."
-          sx={{ width: 300, mx: "auto", mb: 5 }}
+          sx={{ maxWidth: 300, mx: "auto", mb: 5 }}
           renderInput={(params) => <TextField {...params} label="Pokemons" />}
         />
         <Button variant='contained' type='submit'>Submit</Button>

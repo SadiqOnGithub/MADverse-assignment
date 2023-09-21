@@ -11,7 +11,9 @@ const PokemonRow: React.FC<PokemonRowProps> = ({ pokemonName = "Squirtle" }) => 
   const { data: pokemon,
     isLoading,
     error,
-  } = trpc.pokemon.getPokemon.useQuery({ name: pokemonName });
+  } = trpc.pokemon.getPokemon.useQuery({ name: pokemonName }, {
+    refetchOnWindowFocus: false,
+  });
 
   if (isLoading && !pokemon) {
     return <Typography>Summoning Pikachu's lightning bolts ⚡ ...</Typography>;

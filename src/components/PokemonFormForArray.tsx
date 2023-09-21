@@ -2,14 +2,16 @@ import React, { useState, } from 'react';
 import { Box, TextField, Button, Container, Autocomplete } from '@mui/material';
 
 import { trpc } from '@/utils/trpc';
-import PokemonTable from './PokemonTable';
+import PokemonNamesCall from './PokemonNamesCall';
 
 
 const PokemonFormForArray: React.FC = () => {
   const [pokemonNameList, setPokemonNameList] = useState<string[]>([]);
   const [pokemonsData, setPOkemonsData] = useState<string[]>([]);
 
-  const { data: pokemonNames, isLoading } = trpc.pokemon.getPokemonNames.useQuery();
+  const { data: pokemonNames, isLoading } = trpc.pokemon.getPokemonNames.useQuery(undefined, {
+    refetchOnWindowFocus: false,
+  });
 
   return (
     <Container>
@@ -29,7 +31,7 @@ const PokemonFormForArray: React.FC = () => {
           onClick={() => setPOkemonsData(pokemonNameList)}
         >Submit</Button>
       </Box>
-      {pokemonsData.length > 0 && <PokemonTable pokemonNameList={pokemonsData} />}
+      {pokemonsData.length > 0 && <PokemonNamesCall pokemonNameList={pokemonsData} />}
     </Container>
   );
 };

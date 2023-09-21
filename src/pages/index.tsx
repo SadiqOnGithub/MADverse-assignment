@@ -3,12 +3,18 @@ import { Box, Divider, Typography } from '@mui/material';
 
 import PokemonForm from '@/components/PokemonForm';
 import PokemonFormForArray from '@/components/PokemonFormForArray';
+import FilterablePokedexTable from '@/components/FilterablePokedexTable';
 
 
 export default function Home() {
 
   return (
     <>
+      <Box textAlign="center" my='25vh' >
+        <Typography variant='h2' >Pokemons Types</Typography>
+        <FilterablePokedexTable />
+      </Box>
+      <Divider />
       <Box textAlign="center" my='25vh' >
         <Typography variant='h2' >Pokemons Table</Typography>
         <PokemonFormForArray />
