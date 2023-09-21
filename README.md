@@ -10,7 +10,7 @@ Before running the application, make sure you have an SQLite server set up on yo
 
 ```
 npm run generate
-npm run db-reset
+npx prisma db push
 npm run db-seed
 npm run prisma-studio
 ```

@@ -6,19 +6,20 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 model Pokemon {
-  id     Int      @id @default(autoincrement())
+  id     Int    @id @default(autoincrement())
   name   String
   sprite String
-  types  Type[]   // Define the many-to-many relationship
+  types  Type[] // Define the many-to-many relationship
 }
 
 model Type {
-  id      Int     @id @default(autoincrement())
-  name    String  @unique // Add a unique constraint on the name field
+  id      Int       @id @default(autoincrement())
+  name    String    @unique // Add a unique constraint on the name field
   pokemon Pokemon[] // Define the many-to-many relationship
 }
