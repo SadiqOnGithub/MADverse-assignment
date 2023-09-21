@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Card, CardContent } from '@mui/material';
+import { Typography, Card, Box, Avatar } from '@mui/material';
 import { trpc } from '@/utils/trpc';
 
 type PokemonRowProps = {
@@ -7,30 +7,46 @@ type PokemonRowProps = {
 };
 
 const PokemonRow: React.FC<PokemonRowProps> = ({ pokemonName = "Squirtle" }) => {
-  
+
   const { data: pokemon,
     isLoading,
     error,
   } = trpc.pokemon.getPokemon.useQuery({ name: pokemonName });
 
-  if (isLoading) {
-    return <Typography>Summoning Pikachu's lightning bolts ⚡ ...</Typography>
+  if (isLoading && !pokemon) {
+    return <Typography>Summoning Pikachu's lightning bolts ⚡ ...</Typography>;
   }
-  
+
   return (
-    <Card variant="elevation" sx={{
-      mb: 2,
-      maxWidth: 400,
-      mx: 'auto'
-    }}>
-      <CardContent>
-        <Typography variant="h6">{pokemon?.name}</Typography>
-        <Typography>ID: {pokemon?.id}</Typography>
-        <Typography>Types: {pokemon?.types.join(', ')}</Typography>
-        <Typography>ID: {pokemon?.sprite}</Typography>
-        {/* <img src={pokemon?.sprite} alt={pokemon?.name} style={{ maxWidth: '100px' }} /> */}
-      </CardContent>
+    <Card
+      sx={{
+        display: 'flex',
+        flexDirection: 'row', // Arrange content in a row
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        margin: 'auto',
+        // mt: 3,
+        px: 2,
+        pr: '5%',
+      }}
+    >
+      <Avatar
+        sx={{ width: 100, height: 100, marginRight: 2 }}
+        alt={pokemon?.name}
+        src={pokemon?.sprite}
+      />
+
+      <Box >
+        {pokemon?.name.toUpperCase()}
+      </Box>
+      <Box >
+        {pokemon?.types.join(', ').toUpperCase()}
+      </Box>
+      <Box >
+        {pokemon?.id}
+      </Box>
     </Card>
+
   );
 };
 
