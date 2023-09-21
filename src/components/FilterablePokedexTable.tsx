@@ -15,8 +15,6 @@ function FilterablePokedexTable({ }: Props) {
     refetchOnWindowFocus: false,
   });
 
-  console.log("hey heu", pokemonTypes);
-
   return (
     <>
       <Container>

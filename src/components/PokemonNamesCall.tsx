@@ -23,7 +23,7 @@ function PokemonNamesCall({ pokemonNameList }: Props) {
         (isLoading && pokemons === undefined) ? (
           <Skeleton variant='rounded' height={`calc(60px + ${pokemonNameList.length*70}px)`}/>
         ) : (
-          <PokedexTable pokemons={pokemons} />
+            <PokedexTable pokemons={pokemons ? pokemons : []} />
         )
       }
     </>
